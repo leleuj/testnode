@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>TITLE</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/master/FileSaver.min.js"></script>
+    <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/master/canvas-toBlob.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+</head>
+<body id="main">
+<canvas id="canvas" height="300" width="500"></canvas>
+<br/>
+<br/>
+<button id="save-btn">Save Chart Image</button>
+<div id="result">JEJE2</div>
+
+<script>
+    $("#save-btn").click(function() {
+        $("#canvas").get(0).toBlob(function(blob) {
+            saveAs(blob, "chart_1");
+        });
+    });
+
+    var barChartData = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "First Year",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [10, 12, 4, 23, 11, 14, 18]
+        }, {
+            label: "Second Year",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [1, 21, 12, 7, 18, 16, 14]
+        }]
+    };
+    var ctx = $("#canvas");
+    var mychart = new Chart(ctx, {type: 'bar',data: barChartData});
+    $("#canvas").get(0).toBlob(function(blob) {
+        var reader = new window.FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            base64data = reader.result;
+            base64data = base64data.replace('data:image/png;base64,','');
+            $('#result').text(base64data);
+        }
+    });
+</script>
+</body>
+</html>
